@@ -20,7 +20,7 @@ classifier = 'Internal/Intermediate/Embeddings/Classifier'
 
 [internal.intermediate.hdf5]
 voyage = 'Internal/Intermediate/HDF5/VoyageAIEmbeddings'
-neuro = 'Internal/Intermediate/HDF5/DomainEmbeddings'
+psycho = 'Internal/Intermediate/HDF5/DomainEmbeddings'
 
 [public]
 csv = 'Public/Data/CSV'
