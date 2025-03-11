@@ -24,7 +24,7 @@ BASEPATH = os.environ['BASEPATH']
 DEFINITION_PROMPT = PromptTemplate(
     input_variables=["cluster_a_abstracts", "cluster_b_abstracts"],
     template="""
-You are provided with two sets of neuroscientific abstracts from Cluster A and Cluster B, which are similar in nature. Analyze the abstracts from both clusters and identify the most distinguishing features that separate Cluster A from Cluster B with high accuracy and conciseness.
+You are provided with two sets of psychology abstracts from Cluster A and Cluster B, which are similar in nature. Analyze the abstracts from both clusters and identify the most distinguishing features that separate Cluster A from Cluster B with high accuracy and conciseness.
 
 **Instructions:**
 - Return your findings **only** in JSON format.
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # Load the CSV files
     csv_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        'Psychology')
     article_csv_file = 'articles_merged_cleaned_filtered_clustered.csv'
     cluster_csv_file = 'clusters_defined.csv'
     article_df = pd.read_csv(os.path.join(csv_directory, article_csv_file))
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     # Load the embeddings and PMIDs
     shard_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     files = glob(os.path.join(shard_directory, '*.h5'))
     embeddings, pmids = load_embedding_shards(files)
 
