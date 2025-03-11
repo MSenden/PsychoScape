@@ -26,20 +26,20 @@ BASEPATH = os.environ['BASEPATH']
 DIMENSIONS_PROMPT = PromptTemplate(
     input_variables=["title", "abstracts"],
     template="""
-            You are an expert in neuroscience and scientific text analysis. 
-            You are provided with a list of neuroscientific abstracts that belong to the cluster '{title}'.
+            You are an expert in psychology and scientific text analysis. 
+            You are provided with a list of psychological research abstracts that belong to the cluster '{title}'.
             
-            Your task is to identify **key neuroscience dimensions** that best describe the cluster, guided by the following 9 dimensions:
+            Your task is to identify **key psychological dimensions** that best describe the cluster, guided by the following dimensions:
 
-            1. Appliedness: The extent to which the research is basic science (fundamental mechanisms) or applied (translational, clinical, method development, advancing technology).
-            2. Modality: The sensory and/or motor modality under investigation (e.g., visual, auditory, gustatory, somatosensory, motor, sensorimotor, multimodal).
-            3. Spatiotemporal Scale: The spatial (e.g., molecular, cellular, circuit, region, systems, whole-brain) and temporal (e.g., microsecond, millisecond, second, minute, hour, day, week, month, year, lifetime) scale of the research.
-            4. Cognitive Complexity: The level of cognitive complexity under investigation from low level (e.g., sensory processing, motor control) to high level (e.g., language, decision making, social cognition).
-            5. Species: The species under investigation (e.g., human, non-human primate, rodent, drosophila, zebrafish, C. elegans).
-            6. Theory Engagement: The extent to which the research is theory-driven (hypothesis testing) or data-driven (exploratory, descriptive).
-            7. Theory Scope: The scope of the theory under investigation, ranging from specific mechanisms to broad overarching theories of the brain. Intermediate between these are theories focusing on pathophysiology of a specific disorder and highly influential theories with narrow domain coverage. Indiciate the specific unifying theoretical frameworks (e.g., Predictive Coding, Critical Brain Hypothesis, Communication through Coherence, Free Energy Principle, Active Inference, Global Neuronal Workspace, Integrated Information Theory, etc.) if applicable (else, no general theory). There might be more than one framework.
-            8. Methodological Approach: The methodological approach used in the research (e.g., experimental, computational, theoretical, modeling, simulation, data analysis, review, meta-analysis, etc.). Identify specific methods if applicable (e.g., optogenetics, fMRI, EEG, MEG, TMS, lesion studies, single-unit recordings, etc.). There might be more than one method.
-            9. Interdisciplinarity: The extent to which the research is interdisciplinary, combining methods and concepts from multiple fields (e.g., medicine, biology, chemsitry, psychology, computer science, physics, engineering, mathematics, philosophy).
+            1. **Appliedness**: The extent to which the research is fundamental (theoretical, conceptual, or basic cognitive/behavioral processes) or applied (clinical, organizational, educational, forensic, technological, or policy-relevant).
+            2. **Psychological Domain**: The primary domain of psychology covered in the research (e.g., cognitive psychology, social psychology, developmental psychology, clinical psychology, personality psychology, industrial-organizational psychology, educational psychology, neuropsychology, forensic psychology).
+            3. **Cognitive vs. Affective Focus**: The relative emphasis on cognitive processes (e.g., memory, decision-making, problem-solving) versus affective processes (e.g., emotions, motivation, mood disorders).
+            4. **Individual vs. Social Focus**: The extent to which the research focuses on individual-level psychological processes (e.g., perception, attention, executive function) versus social and interpersonal phenomena (e.g., group dynamics, persuasion, prejudice, social norms).
+            5. **Theory Engagement**: The extent to which the research is theory-driven (hypothesis testing) versus data-driven (exploratory, descriptive). Identify specific psychological theories if applicable.
+            6. **Theory Scope**: The scope of the theory under investigation, ranging from specific mechanisms to broad overarching psychological frameworks. Identify any major psychological theories, such as **dual-process theory, cognitive dissonance, reinforcement learning, social identity theory, attachment theory, self-determination theory, embodied cognition, etc.** if applicable (else, no general theory). There might be more than one framework.
+            7. **Methodological Approach**: The methodological approach used in the research (e.g., experimental, observational, survey-based, longitudinal, qualitative, meta-analysis, computational modeling). Identify specific methods if applicable (e.g., fMRI, reaction time measures, eye-tracking, structured interviews, behavioral coding, implicit association tests).
+            8. **Qualitative vs. Quantitative**: The degree to which the research employs **qualitative** (e.g., interviews, discourse analysis, thematic coding) versus **quantitative** (e.g., statistical modeling, psychometrics, inferential testing) methodologies.
+            9. **Interdisciplinarity**: The extent to which the research integrates concepts and methods from other fields (e.g., neuroscience, sociology, economics, linguistics, computer science, philosophy, artificial intelligence).
 
             Examples are not exhaustive and abstracts may contain multiple dimensions.
 
@@ -48,13 +48,13 @@ DIMENSIONS_PROMPT = PromptTemplate(
             Please present your findings in **JSON format** with the following structure:
             {{
                 "Dimension 1 - Appliedness": "Brief assessment of the research's appliedness.",
-                "Dimension 2 - Modality": "Brief overview of the sensory and/or motor modality under investigation.",
-                "Dimension 3 - Spatiotemporal Scale": "Brief description of the spatial and temporal scale of the research.",
-                "Dimension 4 - Cognitive Complexity": "Brief assessment of the research's cognitive complexity.",
-                "Dimension 5 - Species": "Brief overview of the species under investigation.",
-                "Dimension 6 - Theory Engagement": "Brief assessment of the research's theory engagement.",
-                "Dimension 7 - Theory Scope": "Brief assessment of the research's theory scope. Identify specific theoretical frameworks if applicable. There might be more than one framework. Not all articles need to fall under any specific framework, but a significant portion should (one or two are not enough).",
-                "Dimension 8 - Methodological Approach": "Brief overview of the methodological approach used in the research. Identify specific methods if applicable. There might be more than one method.",
+                "Dimension 2 - Psychological Domain": "Brief classification of the domain of psychology.",
+                "Dimension 3 - Cognitive vs. Affective Focus": "Brief description of the relative emphasis on cognitive vs. affective processes.",
+                "Dimension 4 - Individual vs. Social Focus": "Brief description of whether the research focuses on individual psychological mechanisms or social/group-level processes.",
+                "Dimension 5 - Theory Engagement": "Brief assessment of the research's theory engagement.",
+                "Dimension 6 - Theory Scope": "Brief assessment of the research's theory scope. Identify specific psychological frameworks if applicable.",
+                "Dimension 7 - Methodological Approach": "Brief overview of the methodological approach used in the research. Identify specific methods if applicable.",
+                "Dimension 8 - Qualitative vs. Quantitative": "Brief classification of the study as qualitative, quantitative, or mixed methods.",
                 "Dimension 9 - Interdisciplinarity": "Brief assessment of the research's interdisciplinarity."
             }}
 
@@ -82,14 +82,13 @@ if __name__ == '__main__':
 
     # Load the CSV file
     csv_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        BASEPATH, directories['internal']['intermediate']['csv'], 'Psychology')
     article_csv_file = 'articles_merged_cleaned_filtered_clustered.csv'
     article_df = pd.read_csv(os.path.join(csv_directory, article_csv_file))
     article_df = article_df[article_df['Type'] == 'Research']
 
     # Define the output path
-    cluster_csv_file = 'clusters_defined_distinguished_questions_trends.csv'
+    cluster_csv_file = 'clusters_defined_distinguished_trends.csv'
     cluster_df = pd.read_csv(os.path.join(csv_directory, cluster_csv_file))
     output_file = os.path.join(
         csv_directory, cluster_csv_file.replace('.csv', '_assessed.csv'))
@@ -110,7 +109,7 @@ if __name__ == '__main__':
 
     # Load the embeddings and PMIDs
     shard_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     files = glob(os.path.join(shard_directory, '*.h5'))
     embeddings, pmids = load_embedding_shards(files)
 
