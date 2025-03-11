@@ -56,19 +56,19 @@ def update_article_data(data, new_data):
     return data
 
 
-def is_neuroscience(discipline):
+def is_psychology(discipline):
     """
-    Check if an article's discipline includes Neuroscience according
+    Check if an article's discipline includes Psychology according
     to the Journal it was published in.
     
     Parameters:
     - disciplines: list
     
     Returns:
-    - is_neuroscience: list
+    - is_psychology: list
     """
 
-    return 'Neuroscience' in discipline
+    return 'Psychology' in discipline
 
 
 def is_unique(discipline):
@@ -89,7 +89,7 @@ def is_unique(discipline):
 def remove(disciplines, confidence, cutoff):
     """
     Mark articles for removal based on the disciplines of the Journal
-    it was published in and the probability of being neuroscience 
+    it was published in and the probability of being psychology
     according to the filter network.
 
     Parameters:
@@ -102,7 +102,7 @@ def remove(disciplines, confidence, cutoff):
     """
 
     candidates = np.array([
-        not is_neuroscience(discipline) or not is_unique(discipline)
+        not is_psychology(discipline) or not is_unique(discipline)
         for discipline in disciplines
     ])
 
