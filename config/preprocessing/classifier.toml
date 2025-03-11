@@ -28,6 +28,6 @@ learning_rate = 0.0002
 confidence_cutoff = 0
 
 [filtering]
-confidence_cutoff = 0.8
-class_index = 19
+confidence_cutoff = 0.75
+class_index = 25
 shard_size = 200
