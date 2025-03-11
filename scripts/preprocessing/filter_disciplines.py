@@ -10,6 +10,7 @@ import numpy as np
 from tqdm import tqdm
 
 from src.utils.filtering import *
+from src.classes.data_types import Article
 from src.utils.parsing import parse_directories
 from src.utils.classifier import get_disciplines
 from src.utils.load_and_save import save_articles_to_hdf5
@@ -54,6 +55,7 @@ def filter(embedding_files, dataframe, device, model, class_index, cutoff):
         confidence = class_probabilities / max_probabilities
 
         disciplines = get_disciplines(dataframe, pubmed_ids)
+
         remove_indices = remove(disciplines, confidence, cutoff)
 
         nan_indices = np.isnan(embeddings).any(axis=1)
@@ -81,7 +83,7 @@ def filter(embedding_files, dataframe, device, model, class_index, cutoff):
 if __name__ == '__main__':
     configurations = load_configurations()
     items_per_shard = configurations['filtering']['shard_size']
-    neuro_class_index = configurations['filtering']['class_index']
+    psycho_class_index = configurations['filtering']['class_index']
     confidence_cutoff = configurations['filtering']['confidence_cutoff']
 
     data_directories = parse_directories()
@@ -96,49 +98,50 @@ if __name__ == '__main__':
     multidisciplinary_dataframe_dir = os.path.join(
         BASEPATH, data_directories['internal']['intermediate']['csv'],
         'Multidisciplinary')
-    neuroscience_dataframe_dir = os.path.join(
+    psychology_dataframe_dir = os.path.join(
         BASEPATH, data_directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        'Psychology')
 
     multidisciplinary_embedding_dir = os.path.join(
         BASEPATH, data_directories['internal']['intermediate']['embeddings'],
         'Multidisciplinary')
 
-    neuroscience_embedding_dir = os.path.join(
+    psychology_embedding_dir = os.path.join(
         BASEPATH, data_directories['internal']['intermediate']['embeddings'],
-        'Neuroscience')
+        'Psychology')
 
     filtered_data = []
 
     multi_dataframe = pd.read_csv(
-        os.path.join(multidisciplinary_dataframe_dir, 'merged.csv'))
-    neuro_dataframe = pd.read_csv(
-        os.path.join(neuroscience_dataframe_dir, 'merged.csv'))
+        os.path.join(multidisciplinary_dataframe_dir,
+                     'articles_merged_cleaned.csv'))
+    psycho_dataframe = pd.read_csv(
+        os.path.join(psychology_dataframe_dir, 'articles_merged_cleaned.csv'))
 
     multi_embedding_files = glob.glob(
         os.path.join(multidisciplinary_embedding_dir, '*.pkl'))
-    neuro_embedding_files = glob.glob(
-        os.path.join(neuroscience_embedding_dir, '*.pkl'))
+    psycho_embedding_files = glob.glob(
+        os.path.join(psychology_embedding_dir, '*.pkl'))
 
     print('Filtering multidisciplinary data...')
 
     multi_filtered_data, multi_dataframe = filter(multi_embedding_files,
                                                   multi_dataframe, device,
-                                                  model, neuro_class_index,
+                                                  model, psycho_class_index,
                                                   confidence_cutoff)
 
-    print('Filtering neuroscience data...')
-    neuro_filtered_data, neuro_dataframe = filter(neuro_embedding_files,
-                                                  neuro_dataframe, device,
-                                                  model, neuro_class_index,
-                                                  confidence_cutoff)
+    print('Filtering psychology data...')
+    psycho_filtered_data, psycho_dataframe = filter(psycho_embedding_files,
+                                                    psycho_dataframe, device,
+                                                    model, psycho_class_index,
+                                                    confidence_cutoff)
 
     print('Merging data...')
-    dataframe = pd.concat([multi_dataframe, neuro_dataframe],
+    dataframe = pd.concat([multi_dataframe, psycho_dataframe],
                           ignore_index=True)
 
     filtered_data.extend(multi_filtered_data)
-    filtered_data.extend(neuro_filtered_data)
+    filtered_data.extend(psycho_filtered_data)
 
     output_directory = os.path.join(
         BASEPATH,
@@ -146,7 +149,7 @@ if __name__ == '__main__':
 
     os.makedirs(output_directory, exist_ok=True)
 
-    df_output_file = os.path.join(neuroscience_dataframe_dir,
+    df_output_file = os.path.join(psychology_dataframe_dir,
                                   'articles_merged_cleaned_filtered.csv')
     emb_output_file = os.path.join(output_directory,
                                    'articles_merged_cleaned_filtered.h5')

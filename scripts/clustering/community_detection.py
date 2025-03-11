@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     csv_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        'Psychology')
     graph_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['graphs'])
 

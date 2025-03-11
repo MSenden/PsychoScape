@@ -16,7 +16,7 @@ if __name__ == '__main__':
     directories = parse_directories()
 
     shard_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     graph_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['graphs'])
 

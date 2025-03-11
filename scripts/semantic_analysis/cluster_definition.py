@@ -27,13 +27,13 @@ DEFINITION_PROMPT = PromptTemplate(
     template="""
             You are provided with a list of scientific abstracts that belong to a specific research cluster. Your task is to:
 
-1. **Identify the most frequent and relevant keywords and phrases** used in the abstracts within this cluster. The keywords should accurately characterize the research within the cluster and avoid wrong assertions.
+1. **Identify the most frequent and relevant keywords and phrases** used in the abstracts within this cluster. The keywords should accurately characterize the research within the cluster and avoid wrong assertions. No abstract should be misrepresented.
 
-2. **Provide a descriptive title** for the cluster that encapsulates the main themes and methodologies.
+2. **Provide a descriptive title** for the cluster that encapsulates the main themes and methodologies. No abstract should be misrepresented.
 
-3. **Write a brief summary** (1-2 sentences) that describes the main themes and methodologies of the cluster.
+3. **Write a brief summary** (1-2 sentences) that describes the main themes and methodologies of the cluster. No abstract should be misrepresented.
 
-4. **Determine the main focus** of the cluster, whether it is on the themes or methodologies. A methodological focus is when a cluster focuses on method development or consistently applies a specific methodology. A thematic focus is when a cluster consistently studies a specific phenomenon.
+4. **Determine the main focus** of the cluster, whether it is on the themes or methodologies. A methodological focus is when a cluster focuses on method development or consistently applies a specific methodology. A thematic focus is when a cluster consistently studies a specific phenomenon using different methodological approaches.
 
 **Output Format:**
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     # Load the CSV file
     csv_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        'Psychology')
     article_csv_file = 'articles_merged_cleaned_filtered_clustered.csv'
     article_df = pd.read_csv(os.path.join(csv_directory, article_csv_file))
 
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     # Load the embeddings and PMIDs
     shard_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     files = glob(os.path.join(shard_directory, '*.h5'))
     embeddings, pmids = load_embedding_shards(files)
 

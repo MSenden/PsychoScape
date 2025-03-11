@@ -56,7 +56,7 @@ if __name__ == '__main__':
     original_data_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['hdf5']['voyage'])
     new_data_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     model_save_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['models'])
 
