@@ -32,8 +32,8 @@ chain_input = {
 TRENDS_PROMPT = PromptTemplate(
     input_variables=["title", "year", "old_abstracts", "recent_abstracts"],
     template="""
-            You are an expert in neuroscience and scientific text analysis. 
-            You are provided with a set of older neuroscientific abstracts and recent neuroscientific abstracts that belong to the cluster '{title}'.
+            You are an expert in psychology and scientific text analysis. 
+            You are provided with a set of older psychology abstracts and recent psychology abstracts that belong to the cluster '{title}'.
             
             Your task is to compare older abstracts (pre-{year}) to recent abstracts (post-{year}), focusing on:
 
@@ -82,13 +82,12 @@ if __name__ == '__main__':
 
     # Load the CSV file
     csv_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        BASEPATH, directories['internal']['intermediate']['csv'], 'Psychology')
     article_csv_file = 'articles_merged_cleaned_filtered_clustered.csv'
     article_df = pd.read_csv(os.path.join(csv_directory, article_csv_file))
 
     # Define the output path
-    cluster_csv_file = 'clusters_defined_distinguished_questions.csv'
+    cluster_csv_file = 'clusters_defined_distinguished.csv'
     output_file = os.path.join(csv_directory, cluster_csv_file)
     cluster_df = pd.read_csv(output_file)
     output_file = output_file.replace('.csv', '_trends.csv')
