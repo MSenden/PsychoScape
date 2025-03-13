@@ -117,28 +117,31 @@ def get_dimension_df(csv_path, dim_id, dimension_df, dimension, categories,
 DIMENSIONS_PROMPT = PromptTemplate(
     input_variables=["dimension", "categories", "analysis"],
     template="""
-            You are an expert in neuroscience. 
-            You are provided with an analysis of research within a neuroscientific cluster along the following 9 dimensions:
+            You are an expert in psychology. 
+            You are provided with an analysis of research within a psychological cluster along the following dimensions:
 
-            1. Appliedness: The extent to which the research is basic science (fundamental) or applied in one of several ways.
-            2. Modality: The sensory and/or motor modality under investigation.
-            3. Spatiotemporal Scale: The spatial and temporal scale of the research. Can vary from microscale to macroscale for both space and time.
-            4. Cognitive Complexity: The level of cognitive complexity under investigation from low level (e.g., sensory processing, motor control) to high level (e.g., language, decision making, social cognition).
-            5. Species: The species under investigation.
-            6. Theory Engagement: The extent to which the research is theory-driven (hypothesis testing) or data-driven (exploratory, descriptive).
-            7. Theory Scope: The scope of the theory under investigation. Overarching Framework: In neuroscience, an overarching framework is a broad theoretical approach that aims to explain fundamental principles of brain function across multiple cognitive and neural domains.
-                            Domain Framework: In neuroscience, a domain framework is an integrative theory focusing on a specific subfield, offering cohesive principles for that area.
-                            Disease-specific Framework: In neuroscience, a disease-specific framework is a theory that details the neural causes, mechanisms, and manifestations of a particular neurological or psychiatric condition.
-                            Micro Theory: In neuroscience, a micro theory is a narrowly scoped, mechanistic account or model that explains one specific process or phenomenon in the brain.
-            8. Methodological Approach: The methodological approach used in the research. Experimental: Studies in which researchers deliberately manipulate one or more variables under controlled conditions to test for causal effects.
-                                        Observational (Correlational / Descriptive): Studies that measure variables in naturally occurring settings without introducing any active intervention, focusing on describing or correlating observed phenomena.
-                                        Computational / coding: Studies that construct or test mathematical, algorithmic, or simulation-based models to predict, explain, or interpret empirical data or biological processes.
-                                        Theoretical / Conceptual: Work that develops, refines, or critiques conceptual frameworks and theories without generating new empirical data or running computational simulations.
-                                        Meta-Analytic / Systematic Review: Research that synthesizes and reanalyzes existing primary studies, systematically aggregating findings using quantitative (meta-analysis) or rigorous protocol-based (systematic review) methods.
-            9. Interdisciplinarity: The extent to which the research is interdisciplinary, combining methods and concepts from multiple fields. From low (confined to a single discipline) to very high (incorporating multiple disciplines in a transcdisciplinary manner).
-                                    Multidisciplinary: Multiple disciplines study the same problem in parallel, each applying its own methods and perspectives but with little cross-integration.
-                                    Interdisciplinary: Researchers from different disciplines integrate theories, methods, or data to create shared frameworks or solutions that transcend any single field.
-                                    Transdisciplinary: Collaboration goes beyond standard academic boundaries, involving non-academic stakeholders or merging disciplines so completely that new fields or holistic approaches emerge.
+            1. **Appliedness**: The extent to which the research is fundamental (theoretical, conceptual, or basic cognitive/behavioral processes, phenomena, or effects) or applied (directly aimed to inform clinical, organizational, educational, forensic, technological applications, or policy-relevant).
+            2. **Psychological Domain**: The primary domain of psychology covered in the research (e.g., cognitive psychology, social psychology, developmental psychology, clinical psychology, personality psychology, industrial-organizational psychology, educational psychology, neuropsychology, forensic psychology).
+            3. **Cognitive vs. Affective Focus**: The relative emphasis on cognitive processes (e.g., memory, decision-making, problem-solving) versus affective processes (e.g., emotions, motivation, mood disorders).
+            4. **Individual vs. Social Focus**: The extent to which the research focuses on individual-level psychological processes (e.g., perception, attention, executive function) versus social and interpersonal phenomena (e.g., group dynamics, persuasion, prejudice, social norms).
+            5. **Theory Engagement**: The extent to which the research is theory-driven (hypothesis testing) versus data-driven (exploratory, descriptive).
+            6. **Theory Scope**: The scope of the theory under investigation.  
+               - **Broad Framework**: A theory that attempts to provide a high-level, integrative explanation of cognition, behavior, or psychological phenomena (e.g., Dual-Process Theory, Cognitive Dissonance, Social Identity Theory, Self-Determination Theory).  
+               - **Domain-Specific Theory**: A well-established framework within a psychological subfield (e.g., Attachment Theory, Theory of Mind, Prospect Theory, Working Memory Model, Feature Integration Theory, Attentional Control Theory).  
+               - **Micro-Theory**: A narrowly scoped theory or model that explains a specific psychological process (e.g., a mechanism specific to a given phenomenon).  
+            7. **Methodological Approach**: The methodological approach used in the research.  
+               - **Experimental**: Controlled studies with independent and dependent variables to establish causal relationships.  
+               - **Observational (Correlational / Descriptive)**: Studies that measure variables in naturally occurring settings without active manipulation.  
+               - **Survey-Based / Psychometric**: Studies using structured surveys, self-report instruments, or psychometric scales.  
+               - **Qualitative Research**: Studies using interviews, thematic analysis, discourse analysis, or ethnographic methods.  
+               - **Computational / Modeling**: Research using computational models, simulations, or AI-based approaches.  
+               - **Meta-Analytic / Systematic Review**: Research synthesizing existing studies through quantitative or systematic review methods.  
+            8. **Qualitative vs. Quantitative**: The degree to which the research employs **qualitative** (e.g., interviews, thematic coding) versus **quantitative** (e.g., statistical modeling, psychometric analysis) methodologies.
+            9. **Interdisciplinarity**: The extent to which the research integrates concepts and methods from other fields (e.g., neuroscience, sociology, economics, linguistics, computer science, philosophy, artificial intelligence).  
+               - **Low**: Confined to a single discipline.  
+               - **Medium**: Uses some concepts from another field but is primarily psychological.  
+               - **High**: Actively integrates multiple disciplines.  
+               - **Very High (Transdisciplinary)**: Merges disciplines or includes non-academic stakeholders (e.g., policy-makers, industry collaborations).  
 
             Your task is to focus solely on the dimension of {dimension} and provide a binary indication ("yes" or "no") of whether the research within the cluster falls within the specified categories.
             Here are the categories for this dimension:
@@ -152,22 +155,17 @@ DIMENSIONS_PROMPT = PromptTemplate(
                 "Category 2": "yes" / "no",
                 "Category 3": "yes" / "no",
                 ...
-                category n: "yes" / "no"
+                Category n: "yes" / "no"
             }}
 
             ```
 
             **Instructions:**
             - **Accuracy is crucial**: Ensure all information is directly supported by the provided analysis. Do not include information not present in the analysis or make external assumptions.
-
-            - **Consisteny**: Ensure that the evaluation of the dimension does not contradict the provided analysis (including other dimensions).
-            
+            - **Consistency**: Ensure that the evaluation of the dimension does not contradict the provided analysis (including other dimensions).
             - **Focus and Precision**: Only evaluate the dimension of {dimension} and provide a binary response for each category. Do not include any additional information or explanations.
-
             - **Proper Category Naming**: Ensure that the categories are named correctly and accurately reflect the content of the analysis. ONLY use the provided categories and replace Category 1, Category 2, etc. with the actual category names.
-
-            - **Binary Response**: Ensure that the response for each category is binary (yes or no) and does not include any other text or explanations.
-
+            - **Binary Response**: Ensure that the response for each category is binary (yes or no) and does not include any other text or explanations. Categories are not mutually exclusive, and multiple categories can be marked as "yes" if they apply to the analysis.
 
             **Here is the analysis of the research within the cluster along the dimension of {dimension}:**
             {analysis}""",
@@ -183,11 +181,10 @@ if __name__ == '__main__':
 
     # Load the CSV file
     csv_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        BASEPATH, directories['internal']['intermediate']['csv'], 'Psychology')
     checkpoint_path = os.path.join(BASEPATH,
                                    directories['internal']['checkpoints'])
-    cluster_csv_file = 'clusters_defined_distinguished_questions_trends_assessed.csv'
+    cluster_csv_file = 'clusters_defined_distinguished_trends_assessed.csv'
     cluster_df = pd.read_csv(os.path.join(csv_directory, cluster_csv_file))
     narrative_dimension_df = cluster_df[["Cluster ID", "Dimensions"]]
 
@@ -195,37 +192,35 @@ if __name__ == '__main__':
     dimension_csv_file = 'dimensions.csv'
     dimension_categories = {
         'Appliedness': [
-            'Fundamental', 'Translational', 'Clinical', 'Method Development',
-            'Technological Exploitation'
+            'Fundamental', 'Translational', 'Clinical', 'Organizational',
+            'Educational', 'Forensic', 'Legal', 'Technological Exploitation',
+            'Poolicy-Relevant'
         ],
-        'Modality': [
-            'Auditory', 'Visual', 'Olfactory', 'Gustatory', 'Somatosensory',
-            'Multimodal', 'Visuomotor', 'Sensorimotor', 'Motor', 'Emotional',
-            'Behavioral', 'Cognitive'
+        'Psychological Domain': [
+            'Cognitive Psychology',
+            'Social Psychology',
+            'Developmental Psychology',
+            'Clinical Psychology',
+            'Personality Psychology',
+            'Industrial-Organizational Psychology',
+            'Educational Psychology',
+            'Neuropsychology',
+            'Forensic Psychology',
+            'Legal Psychology',
         ],
-        'Spatial Scale': [
-            'Molecular', 'Cellular', 'Circuit', 'Region', 'Systems',
-            'Whole-brain'
-        ],
-        'Temporal Scale': [
-            'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour', 'Day',
-            'Week', 'Month', 'Year', 'Lifetime'
-        ],
-        'Cognitive Complexity':
-        ['Low-level Sensory', 'Low-level Motor', 'Mid-level', 'High-level'],
-        'Species': [
-            'Human', 'Non-human primates', 'Rodents', 'Mammals', 'Birds',
-            'Fish', 'Amphibians', 'Invertebrates', 'Cell cultures', 'Other'
-        ],
-        'Theory Engagement': ['Data-driven', 'Hypothesis-driven'],
-        'Theory Scope': [
-            'Overarching Framework', 'Domain Framework',
-            'Disease-specific Framework', 'Micro Theory'
-        ],
+        'Cognitive vs. Affective Focus':
+        ['Cognitive Processes', 'Affective Processes'],
+        'Individual vs. Social Focus': ['Individual-Level', 'Social-Level'],
+        'Theory Engagement': ['Data-Driven', 'Hypothesis-Driven'],
+        'Theory Scope':
+        ['Broad Framework', 'Domain-Specific Theory', 'Micro-Theory'],
         'Methodological Approach': [
-            'Experimental', 'Observational', 'Computational', 'Theoretical',
-            'Meta-analytic'
+            'Experimental', 'Observational', 'Survey-Based', 'Psychometric',
+            'Qualitative', 'Computational', 'Meta-Analytic',
+            'Systematic Review'
         ],
+        'Qualitative vs. Quantitative':
+        ['Qualitative', 'Quantitative', 'Mixed Methods'],
         'Interdisciplinarity': ['Low', 'Medium', 'High', 'Very High']
     }
 
