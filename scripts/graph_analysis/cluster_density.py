@@ -19,15 +19,13 @@ if __name__ == '__main__':
     print('Loading csv files...')
 
     csv_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['csv'],
-        'Neuroscience')
+        BASEPATH, directories['internal']['intermediate']['csv'], 'Psychology')
 
     article_csv_file = os.path.join(
         csv_directory, 'articles_merged_cleaned_filtered_clustered.csv')
 
     cluster_csv_file = os.path.join(
-        csv_directory,
-        'clusters_defined_distinguished_questions_trends_assessed.csv')
+        csv_directory, 'clusters_defined_distinguished_trends_assessed.csv')
 
     graph_directory = os.path.join(
         BASEPATH, directories['internal']['intermediate']['graphs'])
@@ -37,7 +35,7 @@ if __name__ == '__main__':
 
     print('Loading articles...')
     shard_directory = os.path.join(
-        BASEPATH, directories['internal']['intermediate']['hdf5']['neuro'])
+        BASEPATH, directories['internal']['intermediate']['hdf5']['psycho'])
     article_files = glob(os.path.join(shard_directory, '*.h5'))
 
     article_graph = {
