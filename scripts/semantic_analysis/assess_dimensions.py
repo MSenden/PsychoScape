@@ -172,9 +172,6 @@ if __name__ == '__main__':
         cluster_dimensions_df = pd.DataFrame(cluster_dimensions)
         cluster_dimensions_df.to_csv(checkpoints_file, index=False)
 
-        print(cluster_dimensions)
-        break
-
     # Convert the cluster definitions to a DataFrame
     cluster_dimensions_df = pd.DataFrame(cluster_dimensions)
 
