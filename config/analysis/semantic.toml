@@ -25,12 +25,12 @@ max_abstract_number = 250
 older_cutoff = 2010
 recent_cutoff = 2021
 required_fields = [
-                'Dimension 1 - Appliedness', 'Dimension 2 - Modality',
-                'Dimension 3 - Spatiotemporal Scale',
-                'Dimension 4 - Cognitive Complexity', 'Dimension 5 - Species',
-                'Dimension 6 - Theory Engagement',
-                'Dimension 7 - Theory Scope',
-                'Dimension 8 - Methodological Approach',
+                'Dimension 1 - Appliedness', 'Dimension 2 - Psychological Domain',
+                'Dimension 3 - Cognitive vs. Affective Focus',
+                'Dimension 4 - Individual vs. Social Focus', 'Dimension 5 - Theory Engagement',
+                'Dimension 6 - Theory Scope',
+                'Dimension 7 - Methodological Approach',
+                'Dimension 8 - Qualitative vs. Quantitative',
                 'Dimension 9 - Interdisciplinarity'
         ]
 
@@ -39,4 +39,3 @@ temperature = 1.0
 model_name = 'gpt-4o-2024-08-06'
 delay = 0.2
 retries = 10
-
